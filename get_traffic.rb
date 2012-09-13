@@ -1,13 +1,13 @@
 #!/usr/bin/env ruby
 
 require 'packetfu'
+require 'pp'
 
 include PacketFu
 
 iface = 'en1'
 
-
-
+ADDRESS_QUEUE = Queue.new
 
 def sniff(iface)
   address_list = Hash.new
@@ -19,10 +19,10 @@ def sniff(iface)
 			next if pkt.ip_saddr == Utils.ifconfig(iface)[:ip_saddr]
 			#packet_info = [pkt.ip_saddr, pkt.ip_daddr, pkt.size, pkt.proto.last]
 			
-			if !address_list.has_key?("pkt.ip_saddr") 
+			if !address_list.has_key?("pkt.ip_saddr") && !pkt.ip_saddr.include?('192.168.')
 			  address_list[pkt.ip_saddr] = { :ip_address => pkt.ip_saddr }
 			end
-			puts address_list.length
+			#puts address_list.length  #show progress
 			return address_list if address_list.length == 10
 		end
 	end
@@ -42,7 +42,4 @@ def get_location(address_list)
 end
 
 address_list = sniff(iface)
-
-
-
-puts address_list.inspect
+pp address_list

@@ -3,9 +3,11 @@ GEM
   specs:
     geokit (1.6.5)
       multi_json
+    ipaddress (0.8.0)
     multi_json (1.3.6)
     packetfu (1.1.5)
     pcaprub (0.11.2)
+    require_all (1.2.1)
     rubygems-update (1.8.24)
 
 PLATFORMS
@@ -14,6 +16,8 @@ PLATFORMS
 DEPENDENCIES
   bundler
   geokit
+  ipaddress
   packetfu
   pcaprub
+  require_all
   rubygems-update
