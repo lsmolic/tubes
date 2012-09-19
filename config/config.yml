@@ -1,0 +1,18 @@
+development:
+  sniffer:
+    network_interface: en1  #most macs will use this as the wireless interface
+    network_filter: [192.168.,173.196.,0.0.] #array of IP filters
+    promiscuous: true   #set to false to only listen to your own traffic
+  
+  traceroute:
+    timeout: 5
+    origin_ip_address: 173.196.192.210 #142.129.212.220
+    thread_limit: 5
+    
+  geocoder:
+    thread_limit: 5
+  
+  testing:
+    debug_values: false
+  
+

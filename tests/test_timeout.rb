@@ -27,5 +27,5 @@ def execute_with_timeout!(command, timeout)
 end
 
 
-puts execute_with_timeout!("#{TRACEROUTE} -n #{@destination_ip} & sleep 5 ; kill -9 $!", 10)
+puts execute_with_timeout!("#{TRACEROUTE} -n #{@destination_ip} & sleep 5 ; if ps aux | awk '{print $2 }' | grep $! > /dev/null; then kill -9 $!; fi", 10)
 

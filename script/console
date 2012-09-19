@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+
+require "#{File.expand_path File.dirname(__FILE__)}/init.rb" #initialize the project
+
+require 'irb'
+ARGV[0] = '-I'
+ARGV[1] = ROOT_DIR
+IRB.start

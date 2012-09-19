@@ -1,0 +1,17 @@
+#!/usr/bin/env ruby
+
+require "#{File.expand_path File.dirname(__FILE__)}/init.rb" #initialize the project
+
+@iface = 'en1'  #set to the particular
+
+begin
+  puts "Its like a series of tubes..."
+  
+  sniffer = Tubes::Sniffer.new
+  sniffer.sniff()
+rescue SystemExit, Interrupt
+  abort "time to sleep..."
+end
+
+
+

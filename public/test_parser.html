@@ -1,0 +1,25 @@
+<script type='text/javascript' src='http://code.jquery.com/jquery-1.8.1.min.js'></script>
+<script type='text/javascript' src='/javascript/jquery.dateFormat-1.0.js'></script>
+<script type='text/javascript'>
+
+
+
+
+$(document).ready(function(){
+	map_objects = [];
+	var now = new Date();
+	last_date = $.format.date(now,"yyyyMMddHHmmss");
+	
+	$.getJSON("/javascript/test_downloads.json", function(data){
+		//alert(data.length);
+		$.each(data, function(i, object) {
+			map_objects.push(object.download.json_blob);
+			blob = jQuery.parseJSON(unescape(object.download.json_blob));
+			$.each(blob.locations, function(j, location){
+				alert(location.latitude);
+			});
+			last_date = object.download.timestamp;
+		});
+	});
+});	
+</script>
