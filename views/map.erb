@@ -8,6 +8,7 @@
 <script type='text/javascript' src='http://code.jquery.com/jquery-1.8.1.min.js'></script>
 <script type='text/javascript' src='/javascript/jquery.dateFormat-1.0.js'></script>
 <script type="text/javascript" src="/javascript/microajax.minified.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
 <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyB1Wwh21ce7jnB6yDbjVGN3LC5ns7OoOL4&amp;sensor=false&amp;libraries=geometry">
 </script>
 <style>
@@ -40,6 +41,36 @@ div#map{
 
  var map, setArrows;
 
+ var styles = [
+   {
+     stylers: [
+       { hue: "#00ffe6" },
+       { saturation: -100 }
+     ]
+   },{
+     featureType: "road",
+     elementType: "geometry",
+     stylers: [
+       { lightness: 0 },
+       { visibility: "simplified" },
+       { inverse_lightness: true }
+     ]
+   },{
+     featureType: "road",
+     elementType: "labels",
+     stylers: [
+       { visibility: "off" }
+     ]
+   },{
+       "featureType": "landscape",
+       "stylers": [
+         { "saturation": -100 },
+         { "hue": "#ff0008" },
+         { "lightness": -100 },
+         { "color": "#FFFFFF" }
+       ]
+     }
+ ];
 
  function ArrowHandler() {
   this.setMap(map);
@@ -84,7 +115,7 @@ div#map{
  ArrowHandler.prototype.addIcon = function(file) {
    var g = google.maps;
    var icon = new g.MarkerImage("http://www.google.com/mapfiles/" + file,
-    new g.Size(24, 24), null, new g.Point(12, 12));
+    new g.Size(12, 12), null, new g.Point(6, 6));
    return icon;
   };
 
@@ -111,7 +142,7 @@ div#map{
      // Store markers with 'head' arrows to adjust their offset position on zoom change
      marker.p1 = p1;
      marker.p2 = p2;
-     // marker.setValues({ p1: p1, p2: p2 });
+      marker.setValues({ p1: p1, p2: p2 });
      this.arrowheads.push(marker);
     }
   };
@@ -139,38 +170,139 @@ div#map{
       last_date = object.download.timestamp;
     });
 
-  //  // === Plot the markers ===
-  //  for (var i=0; i< map_objects.length; i++) {
-  //    var locations = jQuery.parseJSON(unescape(map_objects[i])).locations;
-  //    $.each(locations, function (j, location) {
-  //      var point = new GLatLng(location.latitude, location.longitude);
-  //      var marker = createMarker(point, "label?", location.latitude+","+location.longitude);
-  //      //map.addOverlay(marker);
-  //    });
-  //
-  //  }
+
+  //||\\
+  //THIS IS WHERE WE DRAW ALL LINES AT ONCE
 
     // === Plot the polylines ===
+  //  for (var i = 0; i < map_objects.length; i++) {
+  //      var locations = jQuery.parseJSON(unescape(map_objects[i])).locations;
+  //      var pts = [];
+  //      $.each(locations, function (j, location) {
+  //          //alert(location.latitude);
+  //          pts[j] = new g.LatLng(location.latitude, location.longitude);
+  //      });
+  //      createPoly(pts, "onset");
+  //      //midArrows(pts);
+  //  }
+  
+  
+    // === Plot the polylines ===
+    
+    downloads = [];
+    current_download_index = 0;
+    current_location_index = 0;
+    follow_tail_index = 0;
+    
     for (var i = 0; i < map_objects.length; i++) {
-        var locations = jQuery.parseJSON(unescape(map_objects[i])).locations;
-        var pts = [];
-        $.each(locations, function (j, location) {
-            //alert(location.latitude);
-            pts[j] = new g.LatLng(location.latitude, location.longitude);
-        });
-        createPoly(pts, "onset");
-        //midArrows(pts);
+      var locations = jQuery.parseJSON(unescape(map_objects[i])).locations;
+      var pts = [];
+      $.each(locations, function (j, location) {
+        pts[j] = new g.LatLng(location.latitude, location.longitude);
+        
+      });
+      downloads[i] = pts;
     }
+    
+    
+    //function ()
+    function animate()
+    {
+      pts = [];
+      animation = setInterval((function ()
+      {
+        pts[current_location_index] = downloads[current_download_index][current_location_index];
+        
+        if (current_location_index == 0)
+        {
+          poly = createPoly(pts,"onset");
+          //console.log(current_download_index + " - " + current_location_index + " - " + Math.random());
+          poly.setMap(map);
+        }
+        else if (current_location_index > 0)
+        {
+          poly.getPath().insertAt(poly.getPath().getLength(), pts[current_location_index]);
+        }
+        current_location_index++;
+        if( current_location_index == downloads[current_download_index].length )
+        {
+           current_download_index++;
+           current_location_index=0;
+           pts = [];
+           var p = poly;
+           setTimeout(function(){
+             removePath(p);
+           }, 2000)
+        }
+        
+        //shutdown the interval if there are no more lines to animate
+        if (current_download_index == downloads.length)
+        {
+          clearInterval(animation);
+        }
+      }), 100);
+    }
+    
+    function removePath(p)
+    {
+      p.getPath().removeAt(0);
+      if(p.getPath().getLength() == 0)
+      {
+        p.setMap(null);
+      }  
+      else
+      {
+        setTimeout(function()
+        { 
+          removePath(p)
+        }, 100);
+      }
+    }
+    
+    animate();
+    
+    
+    
+      //      setTimeout ((function(p, index, loc, m){
+      //        console.log(pts.length + " - " + p + " - " + m);
+      //        if ( pts.length == 0 )
+      //        {
+      //          var polydup = p;
+      //          if(polydup){
+      //            
+      //              polydup.setMap(null);
+      //          }
+      //        }
+      //        //alert(location.latitude);
+      //        pts[index] = new g.LatLng(loc.latitude, loc.longitude);
+      //        if (pts.length == 1)
+      //        {
+      //          p = createPoly(pts,"onset");
+      //          console.log(index + " - " + p + " - " + m);
+      //          map.addOverlay(p);
+      //        }
+      //        if ( pts.length > 1 )
+      //        {
+      //           p.insertVertex(p.getVertexCount(), pts[index]);
+      //        }
+      //        })(poly, j, location, map), 20);
+      //      
+      //  });
+        //createPoly(pts, "onset");
+        //midArrows(pts);
+   // }
+    
 
   }
 
 
   // Draws a polyline with accordant arrow heads
   function createPoly(path, mode) {
+  var color = '#'+Math.floor(Math.random()*16777215).toString(16)
    var poly = new google.maps.Polyline({
-     strokeColor: "#0000ff",
-     strokeOpacity: 0.8,
-     strokeWeight: 1,
+     strokeColor: color,
+     strokeOpacity: 1,
+     strokeWeight: 1.5,
      map: map,
      path: path });
 
@@ -190,11 +322,12 @@ div#map{
     mapTypeId: "roadmap" // g.MapTypeId.ROADMAP
    };
    map = new g.Map(document.getElementById("map"), opts_map);
+   map.setOptions({styles: styles});
    setArrows = new ArrowHandler();
 
   g.event.addListenerOnce(map, "tilesloaded", function() {
    //createPoly(points3, "head");
-    microAjax("/tubes/downloads/1", process_it);
+    microAjax("/tubes/downloads/1?r="+(Math.random()*1000000), process_it);
   });
  };
 

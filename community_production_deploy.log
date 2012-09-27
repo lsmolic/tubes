@@ -1,0 +1,604 @@
+Script started on Thu 20 Sep 2012 11:09:22 PM CDT
+]0;community@ckemktstagweb1:~/sites/woa/current[community@ckemktstagweb1 current]$ cap community_production deploy current_env=community_staging
+  * executing `community_production'
+  * executing `deploy'
+    triggering before callbacks for `deploy'
+  * executing `deploy:require_environment_variable'
+  * executing `deploy:update'
+ ** transaction: start
+  * executing `deploy:update_code'
+  * getting (via checkout) revision  to /tmp/20120921040929
+    executing locally: cp -R . /tmp/20120921040929
+  * processing exclusions...
+    compressing /tmp/20120921040929 to /tmp/20120921040929.tar.gz
+    executing locally: tar czf 20120921040929.tar.gz 20120921040929
+    servers: ["10.0.98.184", "10.0.98.185"]
+ ** sftp upload /tmp/20120921040929.tar.gz -> /tmp/20120921040929.tar.gz
+    [10.0.98.185] /tmp/20120921040929.tar.gz
+    [10.0.98.184] /tmp/20120921040929.tar.gz
+    [10.0.98.185] done
+    [10.0.98.184] done
+  * sftp upload complete
+  * executing "cd /home/community/sites/woa/releases && tar xzf /tmp/20120921040929.tar.gz && rm /tmp/20120921040929.tar.gz"
+    servers: ["10.0.98.184", "10.0.98.185"]
+    [10.0.98.184] executing command
+    [10.0.98.185] executing command
+    command finished
+  * executing `deploy:finalize_update'
+  * executing "chmod -R g+w /home/community/sites/woa/releases/20120921040929"
+    servers: ["10.0.98.184", "10.0.98.185"]
+    [10.0.98.184] executing command
+    [10.0.98.185] executing command
+    command finished
+  * executing "rm -rf /home/community/sites/woa/releases/20120921040929/log /home/community/sites/woa/releases/20120921040929/public/system /home/community/sites/woa/releases/20120921040929/tmp/pids &&\\\n      mkdir -p /home/community/sites/woa/releases/20120921040929/public &&\\\n      mkdir -p /home/community/sites/woa/releases/20120921040929/tmp &&\\\n      ln -s /home/community/sites/woa/shared/log /home/community/sites/woa/releases/20120921040929/log &&\\\n      ln -s /home/community/sites/woa/shared/system /home/community/sites/woa/releases/20120921040929/public/system &&\\\n      ln -s /home/community/sites/woa/shared/pids /home/community/sites/woa/releases/20120921040929/tmp/pids"
+    servers: ["10.0.98.184", "10.0.98.185"]
+    [10.0.98.184] executing command
+    [10.0.98.185] executing command
+    command finished
+  * executing "find /home/community/sites/woa/releases/20120921040929/public/images /home/community/sites/woa/releases/20120921040929/public/stylesheets /home/community/sites/woa/releases/20120921040929/public/javascripts -exec touch -t 201209210409.51 {} ';'; true"
+    servers: ["10.0.98.184", "10.0.98.185"]
+    [10.0.98.184] executing command
+    [10.0.98.185] executing command
+    command finished
+  * executing `deploy:symlink'
+  * executing "rm -f /home/community/sites/woa/current && ln -s /home/community/sites/woa/releases/20120921040929 /home/community/sites/woa/current"
+    servers: ["10.0.98.184", "10.0.98.185"]
+    [10.0.98.185] executing command
+    [10.0.98.184] executing command
+    command finished
+    triggering after callbacks for `deploy:symlink'
+  * executing `deploy:update_crontab'
+  * executing "cd /home/community/sites/woa/current && whenever --update-crontab community --set 'environment=community_production'"
+    servers: ["10.0.98.185"]
+    [10.0.98.185] executing command
+ ** [out :: 10.0.98.185] [write] crontab file updated
+    command finished
+  * executing `deploy:update_crontab'
+  * executing "cd /home/community/sites/woa/current && whenever --update-crontab community --set 'environment=community_production'"
+    servers: ["10.0.98.185"]
+    [10.0.98.185] executing command
+ ** [out :: 10.0.98.185] [write] crontab file updated
+    command finished
+ ** transaction: commit
+    triggering after callbacks for `deploy:update'
+  * executing `newrelic:notice_deployment'
+  * Getting log of changes for New Relic Deployment details
+  * executing "cat /home/community/sites/woa/current/REVISION"
+    servers: ["10.0.98.184"]
+    [10.0.98.184] executing command
+    command finished
+ ** Error creating New Relic deployment (`log' is not implemented by Capistrano::Deploy::SCM::None)
+ ** /usr/local/lib/ruby/gems/1.8/gems/capistrano-2.5.19/lib/capistrano/recipes/deploy/scm/base.rb:105:in `log'
+ ** /usr/local/lib/ruby/gems/1.8/gems/newrelic_rpm-3.3.0/lib/new_relic/recipes.rb:32
+ ** /usr/local/lib/ruby/gems/1.8/gems/capistrano-2.5.19/lib/capistrano/configuration/execution.rb:139:in `instance_eval'
+ ** /usr/local/lib/ruby/gems/1.8/gems/capistrano-2.5.19/lib/capistrano/configuration/execution.rb:139:in `invoke_task_directly_without_callbacks'
+ ** /usr/local/lib/ruby/gems/1.8/gems/capistrano-2.5.19/lib/capistrano/configuration/callbacks.rb:27:in `invoke_task_directly'
+ ** /usr/local/lib/ruby/gems/1.8/gems/capistrano-2.5.19/lib/capistrano/configuration/execution.rb:89:in `execute_task'
+ ** /usr/local/lib/ruby/gems/1.8/gems/capistrano-2.5.19/lib/capistrano/configuration/execution.rb:101:in `find_and_execute_task'
+ ** /usr/local/lib/ruby/gems/1.8/gems/capistrano-2.5.19/lib/capistrano/callback.rb:38:in `call'
+ ** /usr/local/lib/ruby/gems/1.8/gems/capistrano-2.5.19/lib/capistrano/configuration/callbacks.rb:128:in `trigger'
+ ** /usr/local/lib/ruby/gems/1.8/gems/capistrano-2.5.19/lib/capistrano/configuration/callbacks.rb:128:in `each'
+ ** /usr/local/lib/ruby/gems/1.8/gems/capistrano-2.5.19/lib/capistrano/configuration/callbacks.rb:128:in `trigger'
+ ** /usr/local/lib/ruby/gems/1.8/gems/capistrano-2.5.19/lib/capistrano/configuration/callbacks.rb:29:in `invoke_task_directly'
+ ** /usr/local/lib/ruby/gems/1.8/gems/capistrano-2.5.19/lib/capistrano/configuration/execution.rb:89:in `execute_task'
+ ** /usr/local/lib/ruby/gems/1.8/gems/capistrano-2.5.19/lib/capistrano/configuration/namespaces.rb:186:in `send'
+ ** /usr/local/lib/ruby/gems/1.8/gems/capistrano-2.5.19/lib/capistrano/configuration/namespaces.rb:186:in `method_missing'
+ ** /usr/local/lib/ruby/gems/1.8/gems/capistrano-2.5.19/lib/capistrano/configuration/namespaces.rb:104:in `update'
+ ** /usr/local/lib/ruby/gems/1.8/gems/capistrano-2.5.19/lib/capistrano/recipes/deploy.rb:159:in `load'
+ ** /usr/local/lib/ruby/gems/1.8/gems/capistrano-2.5.19/lib/capistrano/configuration/execution.rb:139:in `instance_eval'
+ ** /usr/local/lib/ruby/gems/1.8/gems/capistrano-2.5.19/lib/capistrano/configuration/execution.rb:139:in `invoke_task_directly_without_callbacks'
+ ** /usr/local/lib/ruby/gems/1.8/gems/capistrano-2.5.19/lib/capistrano/configuration/callbacks.rb:27:in `invoke_task_directly'
+ ** /usr/local/lib/ruby/gems/1.8/gems/capistrano-2.5.19/lib/capistrano/configuration/execution.rb:89:in `execute_task'
+ ** /usr/local/lib/ruby/gems/1.8/gems/capistrano-2.5.19/lib/capistrano/configuration/execution.rb:101:in `find_and_execute_task'
+ ** /usr/local/lib/ruby/gems/1.8/gems/capistrano-2.5.19/lib/capistrano/cli/execute.rb:46:in `execute_requested_actions_without_help'
+ ** /usr/local/lib/ruby/gems/1.8/gems/capistrano-2.5.19/lib/capistrano/cli/execute.rb:45:in `each'
+ ** /usr/local/lib/ruby/gems/1.8/gems/capistrano-2.5.19/lib/capistrano/cli/execute.rb:45:in `execute_requested_actions_without_help'
+ ** /usr/local/lib/ruby/gems/1.8/gems/capistrano-2.5.19/lib/capistrano/cli/help.rb:19:in `execute_requested_actions'
+ ** /usr/local/lib/ruby/gems/1.8/gems/capistrano-2.5.19/lib/capistrano/cli/execute.rb:34:in `execute!'
+ ** /usr/local/lib/ruby/gems/1.8/gems/capistrano-2.5.19/lib/capistrano/cli/execute.rb:14:in `execute'
+ ** /usr/local/lib/ruby/gems/1.8/gems/capistrano-2.5.19/bin/cap:4
+ ** /usr/local/bin/cap:19:in `load'
+ ** /usr/local/bin/cap:19
+  * executing `deploy:restart'
+    triggering before callbacks for `deploy:restart'
+  * executing `deploy:update_system_folder'
+  * executing `deploy:sync_db_to_target_env'
+dump the cke staging database
+push the sql file to production
+sending incremental file list
+cke_staging_database_dump.sql
+
+sent 121173 bytes  received 31 bytes  242408.00 bytes/sec
+total size is 121041  speedup is 1.00
+cleanup cke staging
+import the sql file into production
+clean up cke staging
+  * executing `sass:update'
+  * executing "cd /home/community/sites/woa/releases/20120921040929; RAILS_ENV=community_production rake sass:update --trace"
+    servers: ["10.0.98.184", "10.0.98.185"]
+    [10.0.98.184] executing command
+    [10.0.98.185] executing command
+*** [err :: 10.0.98.185] WARNING: 'require 'rake/rdoctask'' is deprecated.  Please use 'require 'rdoc/task' (in RDoc 2.4.2+)' instead.
+*** [err :: 10.0.98.185] at /usr/local/lib/ruby/gems/1.8/gems/rake-0.9.2.2/lib/rake/rdoctask.rb
+*** [err :: 10.0.98.185] 
+*** [err :: 10.0.98.184] WARNING: 'require 'rake/rdoctask'' is deprecated.  Please use 'require 'rdoc/task' (in RDoc 2.4.2+)' instead.
+*** [err :: 10.0.98.184] at /usr/local/lib/ruby/gems/1.8/gems/rake-0.9.2.2/lib/rake/rdoctask.rb
+*** [err :: 10.0.98.184] 
+*** [err :: 10.0.98.184] ** Invoke sass:update (first_time)
+*** [err :: 10.0.98.184] 
+*** [err :: 10.0.98.184] ** Invoke environment (first_time)
+*** [err :: 10.0.98.184] 
+*** [err :: 10.0.98.184] ** Execute environment
+*** [err :: 10.0.98.184] 
+*** [err :: 10.0.98.184] config.load_paths is deprecated and removed in Rails 3, please use autoload_paths instead
+*** [err :: 10.0.98.184] 
+*** [err :: 10.0.98.185] ** Invoke sass:update (first_time)
+*** [err :: 10.0.98.185] 
+*** [err :: 10.0.98.185] ** Invoke environment (first_time)
+*** [err :: 10.0.98.185] 
+*** [err :: 10.0.98.185] ** Execute environment
+*** [err :: 10.0.98.185] 
+*** [err :: 10.0.98.185] config.load_paths is deprecated and removed in Rails 3, please use autoload_paths instead
+*** [err :: 10.0.98.185] 
+*** [err :: 10.0.98.184] ** Execute sass:update
+*** [err :: 10.0.98.185] ** Execute sass:update
+*** [err :: 10.0.98.185] 
+    command finished
+  * executing "touch /home/community/sites/woa/current/tmp/restart.txt"
+    servers: ["10.0.98.184", "10.0.98.185"]
+    [10.0.98.184] executing command
+    [10.0.98.185] executing command
+    command finished
+    triggering after callbacks for `deploy'
+  * executing `deploy:migrate'
+  * executing "ls -x /home/community/sites/woa/releases"
+    servers: ["10.0.98.185"]
+    [10.0.98.185] executing command
+    command finished
+latest => /home/community/sites/woa/releases/20120921040929
+  * executing "cd /home/community/sites/woa/releases/20120921040929; rake RAILS_ENV=community_production  db:migrate"
+    servers: ["10.0.98.185"]
+    [10.0.98.185] executing command
+*** [err :: 10.0.98.185] WARNING: 'require 'rake/rdoctask'' is deprecated.  Please use 'require 'rdoc/task' (in RDoc 2.4.2+)' instead.
+*** [err :: 10.0.98.185] at /usr/local/lib/ruby/gems/1.8/gems/rake-0.9.2.2/lib/rake/rdoctask.rb
+*** [err :: 10.0.98.185] config.load_paths is deprecated and removed in Rails 3, please use autoload_paths instead
+    command finished
+  * executing `deploy:cleanup'
+ ** keeping 4 of 5 deployed releases
+  * executing "rm -rf /home/community/sites/woa/releases/20120829175901"
+    servers: ["10.0.98.184", "10.0.98.185"]
+    [10.0.98.184] executing command
+    [10.0.98.185] executing command
+    command finished
+  * executing `deploy:rotate_logs'
+Rotating logs.
+BEFORE ROTATION:
+  * executing "ls -al /home/community/sites/woa/shared/log/"
+    servers: ["10.0.98.184", "10.0.98.185"]
+    [10.0.98.184] executing command
+    [10.0.98.185] executing command
+total 3859864
+drwxrwxr-x 2 community       503     12288 Sep 20 23:07 .
+drwxrwxr-x 5 community       503      4096 Dec 16  2010 ..
+-rw-rw-r-- 1 community       503 150189539 Jan  4  2011 20110104102821_community_production.log.gz
+-rw-rw-r-- 1 community       503 121508134 Jan 12  2011 20110112111632_community_production.log.gz
+-rw-rw-r-- 1 community       503 120395417 Jan 19  2011 20110119151416_community_production.log.gz
+-rw-rw-r-- 1 community       503   3093816 Jan 19  2011 20110119200753_community_production.log.gz
+-rw-rw-r-- 1 community       503 107487082 Jan 26  2011 20110126121644_community_production.log.gz
+-rw-rw-r-- 1 community       503  56175440 Jan 31  2011 20110131135810_community_production.log.gz
+-rw-rw-r-- 1 community       503 180594584 Feb 11  2011 20110211183055_community_production.log.gz
+-rw-rw-r-- 1 community       503 185626661 Feb 24  2011 20110224140029_community_production.log.gz
+-rw-rw-r-- 1 community       503 137789420 Mar  3  2011 20110303122602_community_production.log.gz
+-r
+w-rw-r-- 1 community       503         0 Sep 20 04:02 20110307110900_community_production.log
+-rw-rw-r-- 1 community       503        14 Sep 20 04:02 20110307110900_community_production.log.1.bz2
+-rw-rw-r-- 1 community       503        14 Sep 19 04:02 20110307110900_community_production.log.2.bz2
+-rw-r--r-- 1 community       503 258643679 Mar 17  2011 20110317195116_community_production.log.gz
+-rw-rw-r-- 1 community       503 151605219 Mar 22  2011 20110322214143_community_production.log.gz
+-rw-rw-r-- 1 community       503 126677743 Mar 24  2011 20110324150154_community_production.log.gz
+-rw-rw-r-- 1 community       503 197797650 Mar 29  2011 20110329003131_community_production.log.gz
+-rw-rw-r-- 1 community       503 230054726 Apr  5  2011 20110405003119_community_production.log.gz
+-rw-rw-r-- 1 community       503 186100108 Apr 15  2011 20110415171545_community_production.log.gz
+-rw-rw-r-- 1 community       503      3051 Apr 15  2011 20110415172950_community_production.log.gz
+-rw-rw-r-- 1 community       503 
+ 30856159 Apr 18  2011 20110418133834_community_production.log.gz
+-rw-rw-r-- 1 community       503   8336059 Apr 19  2011 20110419003124_community_production.log.gz
+-rw-rw-r-- 1 community       503   1811211 Apr 19  2011 20110419092614_community_production.log.gz
+-rw-rw-r-- 1 community       503 106203251 Apr 26  2011 20110426003133_community_production.log.gz
+-rw-r--r-- 1 community       503  85589466 May  2  2011 20110502112708_community_production.log.gz
+-rw-rw-r-- 1 community       503  38094143 May  3  2011 20110503003136_community_production.log.gz
+-rw-rw-r-- 1 community       503 173079460 May 10  2011 20110510003149_community_production.log.gz
+-rw-rw-r-- 1 community       503 321324052 May 17  2011 20110517003132_community_production.log.gz
+-rw-rw-r-- 1 community       503 376675251 May 24  2011 20110524003151_community_production.log.gz
+-rw-r--r-- 1 community       503 327852524 May 31  2011 20110531003130_community_production.log.gz
+-rw-r--r-- 1 community       503   1203653 Jun 21  2011 20110621084
+618_community_production.log.gz
+-rw-rw-r-- 1 community       503   4255322 Jun 28  2011 20110628144646_community_production.log.gz
+-rw-rw-r-- 1 community       503   1258604 Jun 28  2011 20110628171326_community_production.log.gz
+-rw-rw-r-- 1 community       503    142121 Jun 28  2011 20110628174537_community_production.log.gz
+-rw-rw-r-- 1 community       503    936903 Jun 28  2011 20110628194706_community_production.log.gz
+-rw-rw-r-- 1 community       503    784503 Jul  6  2011 20110706053156_community_production.log.gz
+-rw-rw-r-- 1 community       503    242727 Jul 19  2011 20110719053207_community_production.log.gz
+-rw-rw-r-- 1 community       503    178168 Jul 26  2011 20110726053204_community_production.log.gz
+-rw-rw-r-- 1 community       503    193334 Aug  2  2011 20110802053150_community_production.log.gz
+-rw-rw-r-- 1 community       503   5833971 Aug  9  2011 20110809131938_community_production.log.gz
+-rw-rw-r-- 1 community community    181736 Aug 16  2011 20110816053207_community_production.log.gz
+-r
+w-rw-r-- 1 community community     63772 Sep 13  2011 20110913053359_community_production.log.gz
+-rw-rw-r-- 1 community community     63466 Sep 20  2011 20110920053419_community_production.log.gz
+-rw-rw-r-- 1 community community     75826 Sep 27  2011 20110927053737_community_production.log.gz
+-rw-rw-r-- 1 community community     48467 Oct  4  2011 20111004053418_community_production.log.gz
+-rw-rw-r-- 1 community community    627141 Nov 18  2011 20111118095534_community_production.log.gz
+-rw-rw-r-- 1 community community   1162669 Dec  7  2011 20111207122457_community_production.log.gz
+-rw-rw-r-- 1 community community   1013399 Dec 22  2011 20111222140303_community_production.log.gz
+-rw-rw-r-- 1 community community   2777385 Feb  1  2012 20120201221846_community_production.log.gz
+-rw-rw-r-- 1 community community   2033488 Feb 28  2012 20120228163558_community_production.log.gz
+-rw-rw-r-- 1 community community   2289394 Mar 12  2012 20120312161349_community_production.log.gz
+-rw-rw-r-- 1 community community   1
+930362 Apr 17 13:52 20120417135219_community_production.log.gz
+-rw-rw-r-- 1 community community   3011172 Apr 25 18:37 20120425183750_community_production.log.gz
+-rw-rw-r-- 1 community community   1335109 Jun  5 13:04 20120605130438_community_production.log.gz
+-rw-rw-r-- 1 community community    897263 Jul  9 12:55 20120709125507_community_production.log.gz
+-rw-rw-r-- 1 community community    575339 Jul 18 11:10 20120718111031_community_production.log.gz
+-rw-rw-r-- 1 community community   1293735 Aug 20 16:02 20120820160211_community_production.log.gz
+-rw-rw-r-- 1 community community   4422238 Aug 28 14:27 20120828142748_community_production.log.gz
+-rw-rw-r-- 1 community community   3258497 Aug 29 13:00 20120829130019_community_production.log.gz
+-rw-rw-r-- 1 community community   2325326 Sep 11 16:43 20120911164329_community_production.log.gz
+-rw-rw-r-- 1 community community     29541 Sep 11 17:49 20120911174919_community_production.log.gz
+-rw-rw-r-- 1 community community   4386244 Sep 20 23:07 20120920230705
+_community_production.log.gz
+-rw-rw-r-- 1 community community       110 Sep 20 23:10 community_production.log
+-rw-rw-r-- 1 community community   2558811 Sep 20 04:02 community_production.log.1.bz2
+-rw-rw-r-- 1 community       503 198027812 Jul 20  2011 community_production.log.2
+-rw-rw-r-- 1 community community   2624470 Sep 19 04:02 community_production.log.2.bz2
+-rw-r--r-- 1 community       503         0 Sep 20 04:02 community_staging.log
+-rw-r--r-- 1 community       503        14 Sep 20 04:02 community_staging.log.1.bz2
+-rw-r--r-- 1 community       503        14 Sep 19 04:02 community_staging.log.2.bz2
+-rw-rw-r-- 1 community       503         0 Jan 13  2011 december.txt
+-rw-rw-r-- 1 community       503         0 Sep 20 04:02 development.log
+-rw-rw-r-- 1 community       503        14 Sep 20 04:02 development.log.1.bz2
+-rw-rw-r-- 1 community       503        14 Sep 19 04:02 development.log.2.bz2
+-rw-r--r-- 1 root      root       10591791 Sep 20 23:09 happystarrewards.com-access_log
+-rw-r--r-- 1 root      roo
+t         784050 Sep 20 04:02 happystarrewards.com-access_log.1.bz2
+-rw-r--r-- 1 root      root         852267 Sep 19 04:02 happystarrewards.com-access_log.2.bz2
+-rw-r--r-- 1 root      root              0 Sep 20 04:02 happystarrewards.com-error_log
+-rw-r--r-- 1 root      root             14 Sep 20 04:02 happystarrewards.com-error_log.1.bz2
+-rw-r--r-- 1 root      root             14 Sep 19 04:02 happystarrewards.com-error_log.2.bz2
+-rw-rw-r-- 1 community       503    191281 Jan 13  2011 january.txt
+-rw-r--r-- 1 community       503     30577 Sep 20 23:10 newrelic_agent.log
+-rw-r--r-- 1 community       503      3491 Sep 20 04:02 newrelic_agent.log.1.bz2
+-rw-r--r-- 1 community       503      2414 Sep 19 04:02 newrelic_agent.log.2.bz2
+-rw-rw-r-- 1 community       503         0 Sep 20 04:02 production.log
+-rw-rw-r-- 1 community       503        14 Sep 20 04:02 production.log.1.bz2
+-rw-rw-r-- 1 community       503        14 Sep 19 04:02 production.log.2.bz2
+-rw-r--r-- 1 community       503         0 Sep 20 04:02 sta
+ging.happystarrewards.com-access_log
+-rw-r--r-- 1 community       503        14 Sep 20 04:02 staging.happystarrewards.com-access_log.1.bz2
+-rw-r--r-- 1 community       503        14 Sep 19 04:02 staging.happystarrewards.com-access_log.2.bz2
+-rw-r--r-- 1 community       503         0 Sep 20 04:02 staging.happystarrewards.com-error_log
+-rw-r--r-- 1 community       503        14 Sep 20 04:02 staging.happystarrewards.com-error_log.1.bz2
+-rw-r--r-- 1 community       503        14 Sep 19 04:02 staging.happystarrewards.com-error_log.2.bz2
+-rw-r--r-- 1 community       503         0 Sep 20 04:02 staging.thewheelofawesome.com-access_log
+-rw-r--r-- 1 community       503        14 Sep 20 04:02 staging.thewheelofawesome.com-access_log.1.bz2
+-rw-r--r-- 1 community       503        14 Sep 19 04:02 staging.thewheelofawesome.com-access_log.2.bz2
+-rw-r--r-- 1 community       503         0 Sep 20 04:02 staging.thewheelofawesome.com-error_log
+-rw-r--r-- 1 community       503        14 Sep 20 04:02 staging.thewheelofawesome.com-e
+rror_log.1.bz2
+-rw-r--r-- 1 community       503        14 Sep 19 04:02 staging.thewheelofawesome.com-error_log.2.bz2
+-rw-r--r-- 1 root      root          50177 Sep 20 23:09 thewheelofawesome.com-access_log
+-rw-r--r-- 1 root      root           3410 Sep 20 04:02 thewheelofawesome.com-access_log.1.bz2
+-rw-r--r-- 1 root      root           3428 Sep 19 04:02 thewheelofawesome.com-access_log.2.bz2
+-rw-r--r-- 1 root      root              0 Sep 20 04:02 thewheelofawesome.com-error_log
+-rw-r--r-- 1 root      root             14 Sep 20 04:02 thewheelofawesome.com-error_log.1.bz2
+-rw-r--r-- 1 root      root             14 Sep 19 04:02 thewheelofawesome.com-error_log.2.bz2
+total 242656
+drwxrwxr-x 2 community       503      4096 Sep 20 23:07 .
+drwxrwxr-x 5 community       503      4096 Sep  2  2010 ..
+-rw-rw-r-- 1 community       503   1225623 Jun 28  2011 20110628194706_community_production.log.gz
+-rw-rw-r-- 1 community       503   2215356 Jul  6  2011 20110706053156_community_production.log.gz
+-rw-rw-r-- 1 community       503   3322777 Jul 19  2011 20110719053207_community_production.log.gz
+-rw-rw-r-- 1 community       503    200075 Jul 26  2011 20110726053204_community_production.log.gz
+-rw-rw-r-- 1 community       503    183005 Aug  2  2011 20110802053150_community_production.log.gz
+-rw-rw-r-- 1 community       503   2696410 Aug  9  2011 20110809131938_community_production.log.gz
+-rw-rw-r-- 1 community community    198055 Aug 16  2011 20110816053207_community_production.log.gz
+-rw-rw-r-- 1 community community     59712 Sep 13  2011 20110913053359_community_production.log.gz
+-rw-rw-r-- 1 community community     73786 Sep 20  2011 20110920053419_community_production.log.gz
+-rw
+-rw-r-- 1 community community     79513 Sep 27  2011 20110927053737_community_production.log.gz
+-rw-rw-r-- 1 community community     63835 Oct  4  2011 20111004053418_community_production.log.gz
+-rw-rw-r-- 1 community community    630451 Nov 18  2011 20111118095534_community_production.log.gz
+-rw-rw-r-- 1 community community   1137943 Dec  7  2011 20111207122457_community_production.log.gz
+-rw-rw-r-- 1 community community   1044760 Dec 22  2011 20111222140303_community_production.log.gz
+-rw-rw-r-- 1 community community   2773164 Feb  1  2012 20120201221846_community_production.log.gz
+-rw-rw-r-- 1 community community   2069562 Feb 28  2012 20120228163558_community_production.log.gz
+-rw-rw-r-- 1 community community   2315604 Mar 12  2012 20120312161349_community_production.log.gz
+-rw-rw-r-- 1 community community   1975365 Apr 17 13:52 20120417135219_community_production.log.gz
+-rw-rw-r-- 1 community community   2970807 Apr 25 18:37 20120425183750_community_production.log.gz
+-rw-r--r-- 1 community community   13
+24911 Jun  5 13:04 20120605130438_community_production.log.gz
+-rw-rw-r-- 1 community community    905812 Jul  9 12:55 20120709125507_community_production.log.gz
+-rw-rw-r-- 1 community community    572049 Jul 18 11:10 20120718111031_community_production.log.gz
+-rw-rw-r-- 1 community community         0 Sep 20 04:02 20120820160211_community_production.log
+-rw-rw-r-- 1 community community        14 Sep 20 04:02 20120820160211_community_production.log.1.bz2
+-rw-rw-r-- 1 community community        14 Sep 19 04:02 20120820160211_community_production.log.2.bz2
+-rw-rw-r-- 1 community community      3179 Aug 28 14:02 20120828142748_community_production.log.gz
+-rw-rw-r-- 1 community community      2823 Aug 29 12:34 20120829130019_community_production.log.gz
+-rw-rw-r-- 1 community community   1271990 Sep 11 16:43 20120911164329_community_production.log.gz
+-rw-rw-r-- 1 community community      3768 Sep 11 17:49 20120911174919_community_production.log.gz
+-rw-rw-r-- 1 community community   2554544 Sep 20 23:07 201209202307
+05_community_production.log.gz
+-rw-rw-r-- 1 community community      8410 Sep 20 23:10 community_production.log
+-rw-rw-r-- 1 community community   1823522 Sep 20 04:02 community_production.log.1.bz2
+-rw-rw-r-- 1 community       503 200043832 Jul 20  2011 community_production.log.2
+-rw-rw-r-- 1 community community   1897746 Sep 19 04:02 community_production.log.2.bz2
+-rw-rw-r-- 1 community       503         0 Sep 20 04:02 community_staging.log
+-rw-rw-r-- 1 community       503        14 Sep 20 04:02 community_staging.log.1.bz2
+-rw-rw-r-- 1 community       503        14 Sep 19 04:02 community_staging.log.2.bz2
+-rw-rw-r-- 1 community       503         0 Sep 20 04:02 debug.log
+-rw-rw-r-- 1 community       503        14 Sep 20 04:02 debug.log.1.bz2
+-rw-rw-r-- 1 community       503        14 Sep 19 04:02 debug.log.2.bz2
+-rw-rw-r-- 1 community       503         0 Sep 20 04:02 development.log
+-rw-rw-r-- 1 community       503        14 Sep 20 04:02 development.log.1.bz2
+-rw-rw-r-- 1 community       503        14 Sep 19
+ 04:02 development.log.2.bz2
+-rw-r--r-- 1 root      root       10580726 Sep 20 23:09 happystarrewards.com-access_log
+-rw-r--r-- 1 root      root         790809 Sep 20 04:02 happystarrewards.com-access_log.1.bz2
+-rw-r--r-- 1 root      root         852468 Sep 19 04:02 happystarrewards.com-access_log.2.bz2
+-rw-r--r-- 1 root      root              0 Sep 20 04:02 happystarrewards.com-error_log
+-rw-r--r-- 1 root      root             14 Sep 20 04:02 happystarrewards.com-error_log.1.bz2
+-rw-r--r-- 1 root      root             14 Sep 19 04:02 happystarrewards.com-error_log.2.bz2
+-rw-r--r-- 1 community       503     38762 Sep 20 23:07 newrelic_agent.log
+-rw-r--r-- 1 community       503      3464 Sep 20 04:02 newrelic_agent.log.1.bz2
+-rw-r--r-- 1 community       503      2654 Sep 19 04:02 newrelic_agent.log.2.bz2
+-rw-r--r-- 1 community       503         0 Sep 20 04:02 staging.happystarrewards.com-access_log
+-rw-r--r-- 1 community       503        14 Sep 20 04:02 staging.happystarrewards.com-access_log.1.bz2
+-rw-r--r-- 
+1 community       503        14 Sep 19 04:02 staging.happystarrewards.com-access_log.2.bz2
+-rw-r--r-- 1 community       503         0 Sep 20 04:02 staging.happystarrewards.com-error_log
+-rw-r--r-- 1 community       503        14 Sep 20 04:02 staging.happystarrewards.com-error_log.1.bz2
+-rw-r--r-- 1 community       503        14 Sep 19 04:02 staging.happystarrewards.com-error_log.2.bz2
+-rw-r--r-- 1 community       503         0 Sep 20 04:02 staging.thewheelofawesome.com-access_log
+-rw-r--r-- 1 community       503        14 Sep 20 04:02 staging.thewheelofawesome.com-access_log.1.bz2
+-rw-r--r-- 1 community       503        14 Sep 19 04:02 staging.thewheelofawesome.com-access_log.2.bz2
+-rw-r--r-- 1 community       503         0 Sep 20 04:02 staging.thewheelofawesome.com-error_log
+-rw-r--r-- 1 community       503        14 Sep 20 04:02 staging.thewheelofawesome.com-error_log.1.bz2
+-rw-r--r-- 1 community       503        14 Sep 19 04:02 staging.thewheelofawesome.com-error_log.2.bz2
+-rw-r--r-- 1 root      root      
+    48919 Sep 20 23:08 thewheelofawesome.com-access_log
+-rw-r--r-- 1 root      root           3243 Sep 20 04:02 thewheelofawesome.com-access_log.1.bz2
+-rw-r--r-- 1 root      root           3164 Sep 19 04:02 thewheelofawesome.com-access_log.2.bz2
+-rw-r--r-- 1 root      root              0 Sep 20 04:02 thewheelofawesome.com-error_log
+-rw-r--r-- 1 root      root             14 Sep 20 04:02 thewheelofawesome.com-error_log.1.bz2
+-rw-r--r-- 1 root      root             14 Sep 19 04:02 thewheelofawesome.com-error_log.2.bz2
+    command finished
+  * executing "touch /home/community/sites/woa/shared/log/community_production.log"
+    servers: ["10.0.98.184", "10.0.98.185"]
+    [10.0.98.184] executing command
+    [10.0.98.185] executing command
+    command finished
+  * executing "mv /home/community/sites/woa/shared/log/community_production.log /home/community/sites/woa/shared/log/20120920231010_community_production.log"
+    servers: ["10.0.98.184", "10.0.98.185"]
+    [10.0.98.185] executing command
+    [10.0.98.184] executing command
+    command finished
+  * executing "gzip -f /home/community/sites/woa/shared/log/20120920231010_community_production.log"
+    servers: ["10.0.98.184", "10.0.98.185"]
+    [10.0.98.184] executing command
+    [10.0.98.185] executing command
+    command finished
+  * executing "touch /home/community/sites/woa/shared/log/community_production.log"
+    servers: ["10.0.98.184", "10.0.98.185"]
+    [10.0.98.184] executing command
+    [10.0.98.185] executing command
+    command finished
+  * executing "echo \"\" > /home/community/sites/woa/shared/log/community_production.log"
+    servers: ["10.0.98.184", "10.0.98.185"]
+    [10.0.98.184] executing command
+    [10.0.98.185] executing command
+    command finished
+AFTER ROTATION:
+  * executing "ls -al /home/community/sites/woa/shared/log/"
+    servers: ["10.0.98.184", "10.0.98.185"]
+    [10.0.98.184] executing command
+    [10.0.98.185] executing command
+total 3859868
+drwxrwxr-x 2 community       503     12288 Sep 20 23:10 .
+drwxrwxr-x 5 community       503      4096 Dec 16  2010 ..
+-rw-rw-r-- 1 community       503 150189539 Jan  4  2011 20110104102821_community_production.log.gz
+-rw-rw-r-- 1 community       503 121508134 Jan 12  2011 20110112111632_community_production.log.gz
+-rw-rw-r-- 1 community       503 120395417 Jan 19  2011 20110119151416_community_production.log.gz
+-rw-rw-r-- 1 community       503   3093816 Jan 19  2011 20110119200753_community_production.log.gz
+-rw-rw-r-- 1 community       503 107487082 Jan 26  2011 20110126121644_community_production.log.gz
+-rw-rw-r-- 1 community       503  56175440 Jan 31  2011 20110131135810_community_production.log.gz
+-rw-rw-r-- 1 community       503 180594584 Feb 11  2011 20110211183055_community_production.log.gz
+-rw-rw-r-- 1 community       503 185626661 Feb 24  2011 20110224140029_community_production.log.gz
+-rw-rw-r-- 1 community       503 137789420 Mar  3  2011 20110303122602_community_production.log.gz
+-r
+w-rw-r-- 1 community       503         0 Sep 20 04:02 20110307110900_community_production.log
+-rw-rw-r-- 1 community       503        14 Sep 20 04:02 20110307110900_community_production.log.1.bz2
+-rw-rw-r-- 1 community       503        14 Sep 19 04:02 20110307110900_community_production.log.2.bz2
+-rw-r--r-- 1 community       503 258643679 Mar 17  2011 20110317195116_community_production.log.gz
+-rw-rw-r-- 1 community       503 151605219 Mar 22  2011 20110322214143_community_production.log.gz
+-rw-rw-r-- 1 community       503 126677743 Mar 24  2011 20110324150154_community_production.log.gz
+-rw-rw-r-- 1 community       503 197797650 Mar 29  2011 20110329003131_community_production.log.gz
+-rw-rw-r-- 1 community       503 230054726 Apr  5  2011 20110405003119_community_production.log.gz
+-rw-rw-r-- 1 community       503 186100108 Apr 15  2011 20110415171545_community_production.log.gz
+-rw-rw-r-- 1 community       503      3051 Apr 15  2011 20110415172950_community_production.log.gz
+-rw-rw-r-- 1 community       503 
+ 30856159 Apr 18  2011 20110418133834_community_production.log.gz
+-rw-rw-r-- 1 community       503   8336059 Apr 19  2011 20110419003124_community_production.log.gz
+-rw-rw-r-- 1 community       503   1811211 Apr 19  2011 20110419092614_community_production.log.gz
+-rw-rw-r-- 1 community       503 106203251 Apr 26  2011 20110426003133_community_production.log.gz
+-rw-r--r-- 1 community       503  85589466 May  2  2011 20110502112708_community_production.log.gz
+-rw-rw-r-- 1 community       503  38094143 May  3  2011 20110503003136_community_production.log.gz
+-rw-rw-r-- 1 community       503 173079460 May 10  2011 20110510003149_community_production.log.gz
+-rw-rw-r-- 1 community       503 321324052 May 17  2011 20110517003132_community_production.log.gz
+-rw-rw-r-- 1 community       503 376675251 May 24  2011 20110524003151_community_production.log.gz
+-rw-r--r-- 1 community       503 327852524 May 31  2011 20110531003130_community_production.log.gz
+-rw-r--r-- 1 community       503   1203653 Jun 21  2011 20110621084
+618_community_production.log.gz
+-rw-rw-r-- 1 community       503   4255322 Jun 28  2011 20110628144646_community_production.log.gz
+-rw-rw-r-- 1 community       503   1258604 Jun 28  2011 20110628171326_community_production.log.gz
+-rw-rw-r-- 1 community       503    142121 Jun 28  2011 20110628174537_community_production.log.gz
+-rw-rw-r-- 1 community       503    936903 Jun 28  2011 20110628194706_community_production.log.gz
+-rw-rw-r-- 1 community       503    784503 Jul  6  2011 20110706053156_community_production.log.gz
+-rw-rw-r-- 1 community       503    242727 Jul 19  2011 20110719053207_community_production.log.gz
+-rw-rw-r-- 1 community       503    178168 Jul 26  2011 20110726053204_community_production.log.gz
+-rw-rw-r-- 1 community       503    193334 Aug  2  2011 20110802053150_community_production.log.gz
+-rw-rw-r-- 1 community       503   5833971 Aug  9  2011 20110809131938_community_production.log.gz
+-rw-rw-r-- 1 community community    181736 Aug 16  2011 20110816053207_community_production.log.gz
+-r
+w-rw-r-- 1 community community     63772 Sep 13  2011 20110913053359_community_production.log.gz
+-rw-rw-r-- 1 community community     63466 Sep 20  2011 20110920053419_community_production.log.gz
+-rw-rw-r-- 1 community community     75826 Sep 27  2011 20110927053737_community_production.log.gz
+-rw-rw-r-- 1 community community     48467 Oct  4  2011 20111004053418_community_production.log.gz
+-rw-rw-r-- 1 community community    627141 Nov 18  2011 20111118095534_community_production.log.gz
+-rw-rw-r-- 1 community community   1162669 Dec  7  2011 20111207122457_community_production.log.gz
+-rw-rw-r-- 1 community community   1013399 Dec 22  2011 20111222140303_community_production.log.gz
+-rw-rw-r-- 1 community community   2777385 Feb  1  2012 20120201221846_community_production.log.gz
+-rw-rw-r-- 1 community community   2033488 Feb 28  2012 20120228163558_community_production.log.gz
+-rw-rw-r-- 1 community community   2289394 Mar 12  2012 20120312161349_community_production.log.gz
+-rw-rw-r-- 1 community community   1
+930362 Apr 17 13:52 20120417135219_community_production.log.gz
+-rw-rw-r-- 1 community community   3011172 Apr 25 18:37 20120425183750_community_production.log.gz
+-rw-rw-r-- 1 community community   1335109 Jun  5 13:04 20120605130438_community_production.log.gz
+-rw-rw-r-- 1 community community    897263 Jul  9 12:55 20120709125507_community_production.log.gz
+-rw-rw-r-- 1 community community    575339 Jul 18 11:10 20120718111031_community_production.log.gz
+-rw-rw-r-- 1 community community   1293735 Aug 20 16:02 20120820160211_community_production.log.gz
+-rw-rw-r-- 1 community community   4422238 Aug 28 14:27 20120828142748_community_production.log.gz
+-rw-rw-r-- 1 community community   3258497 Aug 29 13:00 20120829130019_community_production.log.gz
+-rw-rw-r-- 1 community community   2325326 Sep 11 16:43 20120911164329_community_production.log.gz
+-rw-rw-r-- 1 community community     29541 Sep 11 17:49 20120911174919_community_production.log.gz
+-rw-rw-r-- 1 community community   4386244 Sep 20 23:07 20120920230705
+_community_production.log.gz
+-rw-rw-r-- 1 community community       142 Sep 20 23:10 20120920231010_community_production.log.gz
+-rw-rw-r-- 1 community community         1 Sep 20 23:10 community_production.log
+-rw-rw-r-- 1 community community   2558811 Sep 20 04:02 community_production.log.1.bz2
+-rw-rw-r-- 1 community       503 198027812 Jul 20  2011 community_production.log.2
+-rw-rw-r-- 1 community community   2624470 Sep 19 04:02 community_production.log.2.bz2
+-rw-r--r-- 1 community       503         0 Sep 20 04:02 community_staging.log
+-rw-r--r-- 1 community       503        14 Sep 20 04:02 community_staging.log.1.bz2
+-rw-r--r-- 1 community       503        14 Sep 19 04:02 community_staging.log.2.bz2
+-rw-rw-r-- 1 community       503         0 Jan 13  2011 december.txt
+-rw-rw-r-- 1 community       503         0 Sep 20 04:02 development.log
+-rw-rw-r-- 1 community       503        14 Sep 20 04:02 development.log.1.bz2
+-rw-rw-r-- 1 community       503        14 Sep 19 04:02 development.log.2.bz2
+-rw-r--r-- 1 ro
+ot      root       10591896 Sep 20 23:10 happystarrewards.com-access_log
+-rw-r--r-- 1 root      root         784050 Sep 20 04:02 happystarrewards.com-access_log.1.bz2
+-rw-r--r-- 1 root      root         852267 Sep 19 04:02 happystarrewards.com-access_log.2.bz2
+-rw-r--r-- 1 root      root              0 Sep 20 04:02 happystarrewards.com-error_log
+-rw-r--r-- 1 root      root             14 Sep 20 04:02 happystarrewards.com-error_log.1.bz2
+-rw-r--r-- 1 root      root             14 Sep 19 04:02 happystarrewards.com-error_log.2.bz2
+-rw-rw-r-- 1 community       503    191281 Jan 13  2011 january.txt
+-rw-r--r-- 1 community       503     30696 Sep 20 23:10 newrelic_agent.log
+-rw-r--r-- 1 community       503      3491 Sep 20 04:02 newrelic_agent.log.1.bz2
+-rw-r--r-- 1 community       503      2414 Sep 19 04:02 newrelic_agent.log.2.bz2
+-rw-rw-r-- 1 community       503         0 Sep 20 04:02 production.log
+-rw-rw-r-- 1 community       503        14 Sep 20 04:02 production.log.1.bz2
+-rw-rw-r-- 1 community       503     
+   14 Sep 19 04:02 production.log.2.bz2
+-rw-r--r-- 1 community       503         0 Sep 20 04:02 staging.happystarrewards.com-access_log
+-rw-r--r-- 1 community       503        14 Sep 20 04:02 staging.happystarrewards.com-access_log.1.bz2
+-rw-r--r-- 1 community       503        14 Sep 19 04:02 staging.happystarrewards.com-access_log.2.bz2
+-rw-r--r-- 1 community       503         0 Sep 20 04:02 staging.happystarrewards.com-error_log
+-rw-r--r-- 1 community       503        14 Sep 20 04:02 staging.happystarrewards.com-error_log.1.bz2
+-rw-r--r-- 1 community       503        14 Sep 19 04:02 staging.happystarrewards.com-error_log.2.bz2
+-rw-r--r-- 1 community       503         0 Sep 20 04:02 staging.thewheelofawesome.com-access_log
+-rw-r--r-- 1 community       503        14 Sep 20 04:02 staging.thewheelofawesome.com-access_log.1.bz2
+-rw-r--r-- 1 community       503        14 Sep 19 04:02 staging.thewheelofawesome.com-access_log.2.bz2
+-rw-r--r-- 1 community       503         0 Sep 20 04:02 staging.thewheelofawesome.co
+m-error_log
+-rw-r--r-- 1 community       503        14 Sep 20 04:02 staging.thewheelofawesome.com-error_log.1.bz2
+-rw-r--r-- 1 community       503        14 Sep 19 04:02 staging.thewheelofawesome.com-error_log.2.bz2
+-rw-r--r-- 1 root      root          50177 Sep 20 23:09 thewheelofawesome.com-access_log
+-rw-r--r-- 1 root      root           3410 Sep 20 04:02 thewheelofawesome.com-access_log.1.bz2
+-rw-r--r-- 1 root      root           3428 Sep 19 04:02 thewheelofawesome.com-access_log.2.bz2
+-rw-r--r-- 1 root      root              0 Sep 20 04:02 thewheelofawesome.com-error_log
+-rw-r--r-- 1 root      root             14 Sep 20 04:02 thewheelofawesome.com-error_log.1.bz2
+-rw-r--r-- 1 root      root             14 Sep 19 04:02 thewheelofawesome.com-error_log.2.bz2
+total 242652
+drwxrwxr-x 2 community       503      4096 Sep 20 23:10 .
+drwxrwxr-x 5 community       503      4096 Sep  2  2010 ..
+-rw-rw-r-- 1 community       503   1225623 Jun 28  2011 20110628194706_community_production.log.gz
+-rw-rw-r-- 1 community       503   2215356 Jul  6  2011 20110706053156_community_production.log.gz
+-rw-rw-r-- 1 community       503   3322777 Jul 19  2011 20110719053207_community_production.log.gz
+-rw-rw-r-- 1 community       503    200075 Jul 26  2011 20110726053204_community_production.log.gz
+-rw-rw-r-- 1 community       503    183005 Aug  2  2011 20110802053150_community_production.log.gz
+-rw-rw-r-- 1 community       503   2696410 Aug  9  2011 20110809131938_community_production.log.gz
+-rw-rw-r-- 1 community community    198055 Aug 16  2011 20110816053207_community_production.log.gz
+-rw-rw-r-- 1 community community     59712 Sep 13  2011 20110913053359_community_production.log.gz
+-rw-rw-r-- 1 community community     73786 Sep 20  2011 20110920053419_community_production.log.gz
+-rw
+-rw-r-- 1 community community     79513 Sep 27  2011 20110927053737_community_production.log.gz
+-rw-rw-r-- 1 community community     63835 Oct  4  2011 20111004053418_community_production.log.gz
+-rw-rw-r-- 1 community community    630451 Nov 18  2011 20111118095534_community_production.log.gz
+-rw-rw-r-- 1 community community   1137943 Dec  7  2011 20111207122457_community_production.log.gz
+-rw-rw-r-- 1 community community   1044760 Dec 22  2011 20111222140303_community_production.log.gz
+-rw-rw-r-- 1 community community   2773164 Feb  1  2012 20120201221846_community_production.log.gz
+-rw-rw-r-- 1 community community   2069562 Feb 28  2012 20120228163558_community_production.log.gz
+-rw-rw-r-- 1 community community   2315604 Mar 12  2012 20120312161349_community_production.log.gz
+-rw-rw-r-- 1 community community   1975365 Apr 17 13:52 20120417135219_community_production.log.gz
+-rw-rw-r-- 1 community community   2970807 Apr 25 18:37 20120425183750_community_production.log.gz
+-rw-r--r-- 1 community community   13
+24911 Jun  5 13:04 20120605130438_community_production.log.gz
+-rw-rw-r-- 1 community community    905812 Jul  9 12:55 20120709125507_community_production.log.gz
+-rw-rw-r-- 1 community community    572049 Jul 18 11:10 20120718111031_community_production.log.gz
+-rw-rw-r-- 1 community community         0 Sep 20 04:02 20120820160211_community_production.log
+-rw-rw-r-- 1 community community        14 Sep 20 04:02 20120820160211_community_production.log.1.bz2
+-rw-rw-r-- 1 community community        14 Sep 19 04:02 20120820160211_community_production.log.2.bz2
+-rw-rw-r-- 1 community community      3179 Aug 28 14:02 20120828142748_community_production.log.gz
+-rw-rw-r-- 1 community community      2823 Aug 29 12:34 20120829130019_community_production.log.gz
+-rw-rw-r-- 1 community community   1271990 Sep 11 16:43 20120911164329_community_production.log.gz
+-rw-rw-r-- 1 community community      3768 Sep 11 17:49 20120911174919_community_production.log.gz
+-rw-rw-r-- 1 community community   2554544 Sep 20 23:07 201209202307
+05_community_production.log.gz
+-rw-rw-r-- 1 community community      2533 Sep 20 23:10 20120920231010_community_production.log.gz
+-rw-rw-r-- 1 community community         1 Sep 20 23:10 community_production.log
+-rw-rw-r-- 1 community community   1823522 Sep 20 04:02 community_production.log.1.bz2
+-rw-rw-r-- 1 community       503 200043832 Jul 20  2011 community_production.log.2
+-rw-rw-r-- 1 community community   1897746 Sep 19 04:02 community_production.log.2.bz2
+-rw-rw-r-- 1 community       503         0 Sep 20 04:02 community_staging.log
+-rw-rw-r-- 1 community       503        14 Sep 20 04:02 community_staging.log.1.bz2
+-rw-rw-r-- 1 community       503        14 Sep 19 04:02 community_staging.log.2.bz2
+-rw-rw-r-- 1 community       503         0 Sep 20 04:02 debug.log
+-rw-rw-r-- 1 community       503        14 Sep 20 04:02 debug.log.1.bz2
+-rw-rw-r-- 1 community       503        14 Sep 19 04:02 debug.log.2.bz2
+-rw-rw-r-- 1 community       503         0 Sep 20 04:02 development.log
+-rw-rw-r-- 1 community      
+ 503        14 Sep 20 04:02 development.log.1.bz2
+-rw-rw-r-- 1 community       503        14 Sep 19 04:02 development.log.2.bz2
+-rw-r--r-- 1 root      root       10580726 Sep 20 23:09 happystarrewards.com-access_log
+-rw-r--r-- 1 root      root         790809 Sep 20 04:02 happystarrewards.com-access_log.1.bz2
+-rw-r--r-- 1 root      root         852468 Sep 19 04:02 happystarrewards.com-access_log.2.bz2
+-rw-r--r-- 1 root      root              0 Sep 20 04:02 happystarrewards.com-error_log
+-rw-r--r-- 1 root      root             14 Sep 20 04:02 happystarrewards.com-error_log.1.bz2
+-rw-r--r-- 1 root      root             14 Sep 19 04:02 happystarrewards.com-error_log.2.bz2
+-rw-r--r-- 1 community       503     38762 Sep 20 23:07 newrelic_agent.log
+-rw-r--r-- 1 community       503      3464 Sep 20 04:02 newrelic_agent.log.1.bz2
+-rw-r--r-- 1 community       503      2654 Sep 19 04:02 newrelic_agent.log.2.bz2
+-rw-r--r-- 1 community       503         0 Sep 20 04:02 staging.happystarrewards.com-access_log
+-rw-r--r-- 1 c
+ommunity       503        14 Sep 20 04:02 staging.happystarrewards.com-access_log.1.bz2
+-rw-r--r-- 1 community       503        14 Sep 19 04:02 staging.happystarrewards.com-access_log.2.bz2
+-rw-r--r-- 1 community       503         0 Sep 20 04:02 staging.happystarrewards.com-error_log
+-rw-r--r-- 1 community       503        14 Sep 20 04:02 staging.happystarrewards.com-error_log.1.bz2
+-rw-r--r-- 1 community       503        14 Sep 19 04:02 staging.happystarrewards.com-error_log.2.bz2
+-rw-r--r-- 1 community       503         0 Sep 20 04:02 staging.thewheelofawesome.com-access_log
+-rw-r--r-- 1 community       503        14 Sep 20 04:02 staging.thewheelofawesome.com-access_log.1.bz2
+-rw-r--r-- 1 community       503        14 Sep 19 04:02 staging.thewheelofawesome.com-access_log.2.bz2
+-rw-r--r-- 1 community       503         0 Sep 20 04:02 staging.thewheelofawesome.com-error_log
+-rw-r--r-- 1 community       503        14 Sep 20 04:02 staging.thewheelofawesome.com-error_log.1.bz2
+-rw-r--r-- 1 community       503    
+    14 Sep 19 04:02 staging.thewheelofawesome.com-error_log.2.bz2
+-rw-r--r-- 1 root      root          48919 Sep 20 23:08 thewheelofawesome.com-access_log
+-rw-r--r-- 1 root      root           3243 Sep 20 04:02 thewheelofawesome.com-access_log.1.bz2
+-rw-r--r-- 1 root      root           3164 Sep 19 04:02 thewheelofawesome.com-access_log.2.bz2
+-rw-r--r-- 1 root      root              0 Sep 20 04:02 thewheelofawesome.com-error_log
+-rw-r--r-- 1 root      root             14 Sep 20 04:02 thewheelofawesome.com-error_log.1.bz2
+-rw-r--r-- 1 root      root             14 Sep 19 04:02 thewheelofawesome.com-error_log.2.bz2
+    command finished
+]0;community@ckemktstagweb1:~/sites/woa/current[community@ckemktstagweb1 current]$ exit
+
+Script done on Thu 20 Sep 2012 11:10:27 PM CDT

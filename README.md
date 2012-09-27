@@ -25,6 +25,8 @@ What I'm building:
 
 #mapping the locations
 http://www.wolfpil.de/v3/arrow-heads.html -->> used as a primer for the google mapping
+http://gmaps-samples-v3.googlecode.com/svn/trunk/styledmaps/wizard/index.html  -->> styling the maps
+http://rectangleworld.com/demos/FireTrails/FireTrails.html  -->> firetrails
 
 
 
