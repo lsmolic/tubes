@@ -9,3 +9,5 @@ STDOUT.reopen(log)
 STDERR.reopen(log)
 
 run Sinatra::Application
+
+use ActiveRecord::ConnectionAdapters::ConnectionManagement

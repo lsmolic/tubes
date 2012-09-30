@@ -6,10 +6,11 @@ before do
   request.env['PATH_INFO'].gsub!(/\/$/, '')
 end
 
-get '/tubes/downloads/:since?' do
+get '/tubes/downloads/latest' do
   headers('Content-Type' => "application/json")
-  #Download.all({ :select => 'id, date_format(created_at, "%Y%m%d%H%i%s") as `timestamp`, json_blob', :conditions => 'created_at > date_format(CURDATE(), "%Y%m%d%H%i%s")' }).to_json
-  Download.all( :select => 'id, date_format(created_at, "%Y%m%d%H%i%s") as `timestamp`, json_blob', :limit => 50).to_json  #testing purposes
+  downloads = Download.all( :select => 'id, date_format(created_at, "%Y%m%d%H%i%s") as `timestamp`, json_blob', :limit => 50, :order => "created_at DESC") 
+  Download.connection.close
+  downloads.to_json
 end
 
 get '/' do

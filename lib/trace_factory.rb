@@ -45,13 +45,27 @@ module Tubes
                @@thread_count += 1
               destination_ip = @@trace_queue.pop
               request = Tubes::Request.new(destination_ip)
-              request.trace_me!
-              request.geocode_locations!
+              source_ip = IPAddress.parse(TUBES_CONFIG['traceroute']['origin_ip_address']).to_i
+              destination_ip = IPAddress.parse(destination_ip).to_i
+              
+              results = TraceCache.find(:all, :conditions => "source_ip = #{source_ip} AND destination_ip = #{destination_ip}")
+              if results.empty?
+                request.trace_me!
+                request.geocode_locations!
+              else
+                puts "CACHED trace"
+                create = Download.create(
+                  :json_blob => results.first.json_blob
+                )
+              end
               Thread.current[:output] = request
-            rescue
+            rescue => exception
+              puts exception.inspect
               @@thread_count -= 1
-              puts "Something went while tracing an IP"
+              puts "Something went wrong while tracing an IP"
             ensure
+              Download.connection.close
+              TraceCache.connection.close
               Thread.exit
             end
           }

@@ -4,7 +4,7 @@ require 'ipaddress'
 
 module Tubes
   class Request
-    attr_reader :locations
+    attr_reader :locations, :origin_ip, :destination_ip
     
     def initialize(destination_ip)
       @destination_ip = destination_ip

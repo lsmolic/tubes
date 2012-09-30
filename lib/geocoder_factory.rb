@@ -49,14 +49,34 @@ module Tubes
                 else
                   request.locations.delete(location)
                 end
-              end 
-              Download.create(
-                :json_blob => request.to_json
-              )
+              end
+              if !locations.empty?
+                create_download = Download.create(
+                  :json_blob => request.to_json
+                )
+                
+                src = IPAddress.parse(request.origin_ip).to_i
+                dest = IPAddress.parse(request.destination_ip).to_i
+                
+                trace = TraceCache.find(:all, :conditions => "source_ip = #{src} AND destination_ip = #{dest}")
+                if trace.empty?
+                  create = TraceCache.create(
+                    :source_ip => src,
+                    :destination_ip => dest,
+                    :json_blob => request.to_json 
+                  )
+                  puts "TRACECACHE: added new trace"
+                end
+              end
               #puts "locations.length: #{request.locations.length}"
-            rescue
+            rescue => exception
+              puts exception.inspect
               @@thread_count -= 1
-              puts "Something went while geocoding a location"
+              puts "Something went wrong while geocoding a location"
+              puts "#{e.backtrace}"
+            ensure
+              Download.connection.close
+              TraceCache.connection.close
             end
           }
         end

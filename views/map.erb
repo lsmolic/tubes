@@ -8,7 +8,6 @@
 <script type='text/javascript' src='http://code.jquery.com/jquery-1.8.1.min.js'></script>
 <script type='text/javascript' src='/javascript/jquery.dateFormat-1.0.js'></script>
 <script type="text/javascript" src="/javascript/microajax.minified.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
 <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyB1Wwh21ce7jnB6yDbjVGN3LC5ns7OoOL4&amp;sensor=false&amp;libraries=geometry">
 </script>
 <style>
@@ -39,9 +38,9 @@ div#map{
  document.getElementById("map").style.height = document.body.clientHeight + "px";
  document.getElementById("map").style.width = document.body.clientWidth + "px";
 
- var map, setArrows;
+var map, setArrows;
 
- var styles = [
+var styles = [
    {
      stylers: [
        { hue: "#00ffe6" },
@@ -69,20 +68,21 @@ div#map{
          { "lightness": -100 },
          { "color": "#FFFFFF" }
        ]
-     }
- ];
+     }];
 
- function ArrowHandler() {
-  this.setMap(map);
-  // Markers with 'head' arrows must be stored
-  this.arrowheads = [];
- }
+  function ArrowHandler() 
+  {
+    this.setMap(map);
+    // Markers with 'head' arrows must be stored
+    this.arrowheads = [];
+  }
  // Extends OverlayView from the Maps API
  ArrowHandler.prototype = new google.maps.OverlayView();
 
  // Draw is inter alia called on zoom change events.
  // So we can use the draw method as zoom change listener
- ArrowHandler.prototype.draw = function() {
+ ArrowHandler.prototype.draw = function() 
+ {
 
   if (this.arrowheads.length > 0) {
    for (var i = 0, m; m = this.arrowheads[i]; i++) {
@@ -91,160 +91,214 @@ div#map{
   }
  };
 
-
  // Computes the length of a polyline in pixels
  // to adjust the position of the 'head' arrow
- ArrowHandler.prototype.usePixelOffset = function(p1, p2) {
+ArrowHandler.prototype.usePixelOffset = function(p1, p2) 
+{
 
-   var proj = this.getProjection();
-   var g = google.maps;
-   var dist = 12; // Half size of triangle icon
+  var proj = this.getProjection();
+  var dist = 12; // Half size of triangle icon
 
-   var pix1 = proj.fromLatLngToContainerPixel(p1);
-   var pix2 = proj.fromLatLngToContainerPixel(p2);
-   var vector = new g.Point(pix2.x - pix1.x, pix2.y - pix1.y);
-   var length = Math.sqrt(vector.x * vector.x + vector.y * vector.y);
-   var normal = new g.Point(vector.x/length, vector.y/length);
-   var offset = new g.Point(pix2.x - dist * normal.x, pix2.y - dist * normal.y);
+  var pix1 = proj.fromLatLngToContainerPixel(p1);
+  var pix2 = proj.fromLatLngToContainerPixel(p2);
+  var vector = new gMap.Point(pix2.x - pix1.x, pix2.y - pix1.y);
+  var length = Math.sqrt(vector.x * vector.x + vector.y * vector.y);
+  var normal = new gMap.Point(vector.x/length, vector.y/length);
+  var offset = new gMap.Point(pix2.x - dist * normal.x, pix2.y - dist * normal.y);
 
-   return proj.fromContainerPixelToLatLng(offset);
- };
+  return proj.fromContainerPixelToLatLng(offset);
+};
 
-
-  // Returns the triangle icon object
- ArrowHandler.prototype.addIcon = function(file) {
-   var g = google.maps;
-   var icon = new g.MarkerImage("http://www.google.com/mapfiles/" + file,
-    new g.Size(12, 12), null, new g.Point(6, 6));
+// Returns the triangle icon object
+ArrowHandler.prototype.addIcon = function(file) 
+{
+   var icon = new gMap.MarkerImage("http://www.google.com/mapfiles/" + file, new gMap.Size(12, 12), null, new gMap.Point(6, 6));
    return icon;
-  };
-
+};
   // Creates markers with corresponding triangle icons
- ArrowHandler.prototype.create = function(p1, p2, mode) {
+ArrowHandler.prototype.create = function(p1, p2, mode) {
    var markerpos;
-   var g = google.maps;
    if (mode == "onset") markerpos = p1;
    else if (mode == "head") markerpos = this.usePixelOffset(p1, p2);
-   else if (mode == "midline") markerpos = g.geometry.spherical.interpolate(p1, p2, .5);
+   else if (mode == "midline") markerpos = gMap.geometry.spherical.interpolate(p1, p2, .5);
 
    // Compute the bearing of the line in degrees
-   var dir = g.geometry.spherical.computeHeading(p1, p2).toFixed(1);
+   var dir = gMap.geometry.spherical.computeHeading(p1, p2).toFixed(1);
     // round it to a multiple of 3 and correct unusable numbers
     dir = Math.round(dir/3) * 3;
     if (dir < 0) dir += 240;
     if (dir > 117) dir -= 120;
     // use the corresponding icon
     var icon = this.addIcon("dir_" +dir+ ".png");
-    var marker = new g.Marker({position: markerpos,
+    var marker = new gMap.Marker({position: markerpos,
      map: map, icon: icon, clickable: false
     });
-    if (mode == "head") {
+    if (mode == "head") 
+    {
      // Store markers with 'head' arrows to adjust their offset position on zoom change
      marker.p1 = p1;
      marker.p2 = p2;
       marker.setValues({ p1: p1, p2: p2 });
      this.arrowheads.push(marker);
     }
-  };
+}
 
- ArrowHandler.prototype.load = function (points, mode) {
+ArrowHandler.prototype.load = function (points, mode) {
     for (var i = 0; i < points.length-1; i++) {
       var p1 = points[i],
       p2 = points[i + 1];
       this.create(p1, p2, mode); 
     }
- };
+};
 
- // ================================================================
-  // === Define the function thats going to process the JSON file ===
-  function process_it(doc) {
-    
-    var g = google.maps;
-    var map_objects = new Array();
-    var now = new Date();
-    last_date = $.format.date(now, "yyyyMMddHHmmss");
 
-    data = eval('(' + doc + ')');
-    $.each(data, function (i, object) {
-      map_objects.push(object.download.json_blob);
-      last_date = object.download.timestamp;
+downloads = [];
+new_downloads = []; //on-deck.
+running = false;
+
+  // ================================================================
+// === Define the function thats going to process the JSON file ===
+function parse_results(doc) 
+{
+  var map_objects = new Array();
+  var now = new Date();
+  last_date = $.format.date(now, "yyyyMMddHHmmss");
+
+  var data = "";  
+  
+  //if the server is broken, then just show a map
+  try { data = eval('(' + doc + ')'); } catch (e) { console.log(e); console.log(doc); return false; }
+  
+  $.each(data, function (i, object) {
+    map_objects.push(object.download.json_blob);
+    last_date = object.download.timestamp;
+  });
+  
+  //determine polyline verticies
+  // we are going to push these into "new_downloads" and since there could be existing entries
+  // start the for loop at the new_downloads.length
+  var download_list = [];
+  for (var i = new_downloads.length; i < map_objects.length; i++) {
+    var locations = jQuery.parseJSON(unescape(map_objects[i])).locations;
+    var pts = [];
+    $.each(locations, function (j, location) {
+      pts[j] = new gMap.LatLng(location.latitude, location.longitude);
     });
-
-
-  //||\\
-  //THIS IS WHERE WE DRAW ALL LINES AT ONCE
-
-    // === Plot the polylines ===
-  //  for (var i = 0; i < map_objects.length; i++) {
-  //      var locations = jQuery.parseJSON(unescape(map_objects[i])).locations;
-  //      var pts = [];
-  //      $.each(locations, function (j, location) {
-  //          //alert(location.latitude);
-  //          pts[j] = new g.LatLng(location.latitude, location.longitude);
-  //      });
-  //      createPoly(pts, "onset");
-  //      //midArrows(pts);
-  //  }
-  
-  
-    // === Plot the polylines ===
+    download_list[i] = pts.slice(0);
     
-    downloads = [];
+  }
+  
+  //first run or reset will put new list of downloads in to active list
+  if ( downloads.length == 0 )
+  {
+    downloads = download_list;
+  }
+  else
+  {
+    new_downloads = download_list;
+  }
+  plot_map();
+}
+  
+function swap_in_new_downloads()
+{
+  downloads = new_downloads.slice(0);
+  new_downloads = [];
+  microAjax("/tubes/downloads/latest?r="+(Math.random()*1000000), parse_results);
+}
+
+function plot_map() 
+{
+  function plot_all_lines()
+  {
+    //THIS IS WHERE WE DRAW ALL LINES AT ONCE
+
+      // === Plot the polylines ===
+      //  for (var i = 0; i < map_objects.length; i++) {
+      //      var locations = jQuery.parseJSON(unescape(map_objects[i])).locations;
+      //      var pts = [];
+      //      $.each(locations, function (j, location) {
+      //          //alert(location.latitude);
+      //          pts[j] = new gMap.LatLng(location.latitude, location.longitude);
+      //      });
+      //      createPoly(pts, "onset");
+      //      //midArrows(pts);
+      //  }
+  }
+  
+  function plot_line_animations()
+  {
+    // === DRAW LINES ONE VERTEX AT A TImE AND REMOVE ONE AT A TIME ===
+  
     current_download_index = 0;
     current_location_index = 0;
     follow_tail_index = 0;
-    
-    for (var i = 0; i < map_objects.length; i++) {
-      var locations = jQuery.parseJSON(unescape(map_objects[i])).locations;
-      var pts = [];
-      $.each(locations, function (j, location) {
-        pts[j] = new g.LatLng(location.latitude, location.longitude);
-        
-      });
-      downloads[i] = pts;
-    }
-    
-    
-    //function ()
+    current_poly_list = [];
+  
     function animate()
     {
       pts = [];
       animation = setInterval((function ()
       {
+        if ( downloads.length == 0 )
+        {
+          return;
+        }
+        //get the first point in the line
         pts[current_location_index] = downloads[current_download_index][current_location_index];
-        
+      
         if (current_location_index == 0)
         {
+          //if we are on the first point, create a polyLine and add it to the map
           poly = createPoly(pts,"onset");
-          //console.log(current_download_index + " - " + current_location_index + " - " + Math.random());
+          current_poly_list.push(poly);
           poly.setMap(map);
         }
         else if (current_location_index > 0)
         {
+          //add each subsequent vertex to the end of the current polyline 
           poly.getPath().insertAt(poly.getPath().getLength(), pts[current_location_index]);
+          //midArrows(pts);
         }
+      
         current_location_index++;
+      
+        //if we are at the end of the line verticies, go to the next one and reset values to star a new polyline
         if( current_location_index == downloads[current_download_index].length )
         {
            current_download_index++;
            current_location_index=0;
            pts = [];
+         
+           //set a timer for when we should start removing the finished polyline
+           //we set the poly object to a local variable so it doesn't get overridden
+           //in the next loop
            var p = poly;
            setTimeout(function(){
              removePath(p);
-           }, 2000)
+           }, 2000);
         }
-        
+      
         //shutdown the interval if there are no more lines to animate
         if (current_download_index == downloads.length)
         {
+//          $.each(current_poly_list, function (i, path)
+//          {
+//            if (p.getPath().getLength() > 0)
+//            {
+//              removePath(path);
+//            }
+//          });
+          swap_in_new_downloads();
+          plot_line_animations();
           clearInterval(animation);
         }
       }), 100);
     }
-    
+  
     function removePath(p)
     {
+      //remove the first
       p.getPath().removeAt(0);
       if(p.getPath().getLength() == 0)
       {
@@ -258,44 +312,9 @@ div#map{
         }, 100);
       }
     }
-    
     animate();
-    
-    
-    
-      //      setTimeout ((function(p, index, loc, m){
-      //        console.log(pts.length + " - " + p + " - " + m);
-      //        if ( pts.length == 0 )
-      //        {
-      //          var polydup = p;
-      //          if(polydup){
-      //            
-      //              polydup.setMap(null);
-      //          }
-      //        }
-      //        //alert(location.latitude);
-      //        pts[index] = new g.LatLng(loc.latitude, loc.longitude);
-      //        if (pts.length == 1)
-      //        {
-      //          p = createPoly(pts,"onset");
-      //          console.log(index + " - " + p + " - " + m);
-      //          map.addOverlay(p);
-      //        }
-      //        if ( pts.length > 1 )
-      //        {
-      //           p.insertVertex(p.getVertexCount(), pts[index]);
-      //        }
-      //        })(poly, j, location, map), 20);
-      //      
-      //  });
-        //createPoly(pts, "onset");
-        //midArrows(pts);
-   // }
-    
-
   }
-
-
+  
   // Draws a polyline with accordant arrow heads
   function createPoly(path, mode) {
   var color = '#'+Math.floor(Math.random()*16777215).toString(16)
@@ -309,27 +328,31 @@ div#map{
    setArrows.load(path, mode);
    return poly;
   }
-
+  
+  if( !running )
+  {
+    plot_line_animations();
+    running = true;
+  }
+}
 
   // Create the map
-  window.onload = function() {
-
-   var g = google.maps;
-   var center = new g.LatLng(43.38,-79.55);
-   var opts_map = {
+window.onload = function() {
+  gMap = google.maps;
+  var center = new gMap.LatLng(43.38,-79.55);
+  var opts_map = {
     center: center, zoom: 3,
     streetViewControl: false,
-    mapTypeId: "roadmap" // g.MapTypeId.ROADMAP
-   };
-   map = new g.Map(document.getElementById("map"), opts_map);
-   map.setOptions({styles: styles});
-   setArrows = new ArrowHandler();
+    mapTypeId: "roadmap" // gMap.MapTypeId.ROADMAP
+  };
+  map = new gMap.Map(document.getElementById("map"), opts_map);
+  map.setOptions({styles: styles});
+  setArrows = new ArrowHandler();
 
-  g.event.addListenerOnce(map, "tilesloaded", function() {
-   //createPoly(points3, "head");
-    microAjax("/tubes/downloads/1?r="+(Math.random()*1000000), process_it);
+  gMap.event.addListenerOnce(map, "tilesloaded", function() {
+    microAjax("/tubes/downloads/latest?r="+(Math.random()*1000000), parse_results);
   });
- };
+};
 
 
 //]]>
